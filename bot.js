@@ -142,7 +142,22 @@ function handleSuggest(message) {
                 if (message.content.toLowerCase() == "y") {
                     //Continue
                     state.state = 2;
-                    message.author.send("**Title**\nCreate a title for this suggestion.\n\n:arrow_right: Enter the title of your suggestion now. (30 characters or less)");
+                    
+                    var embed = new Discord.RichEmbed("test");
+                    embed.setAuthor(message.author.username + "#" + message.author.discriminator, message.author.displayAvatarURL);
+                    embed.setColor("#00CA00");
+                    embed.setDescription("Suggestion from <@" + message.author.id + ">");
+                    
+                    if (state.suggestion == null) {
+                        embed.addField(":large_blue_circle: ...", ":white_circle:");
+                    } else {
+                        embed.addField(":large_blue_circle: ...", ":white_circle: " + state.suggestion);
+                    }
+                    
+                    embed.setFooter("User ID: " + message.author.id);
+                    message.author.sendEmbed(embed);
+                    
+                    message.author.send(":arrow_right: What's the title for this suggestion? It'll need to be 30 characters or less.");
                 } else {
                     //Abort
                     message.author.send(":octagonal_sign: Suggestion process cancelled.");
@@ -159,13 +174,23 @@ function handleSuggest(message) {
                     
                     if (state.suggestion == null) {
                         state.state = 3;
+                        
+                        var embed = new Discord.RichEmbed("test");
+                        embed.setAuthor(message.author.username + "#" + message.author.discriminator, message.author.displayAvatarURL);
+                        embed.setColor("#00CA00");
+                        embed.setDescription("Suggestion from <@" + message.author.id + ">");
+                        
+                        embed.addField(":white_circle: " + state.title, ":large_blue_circle: ...");
+                        
+                        embed.setFooter("User ID: " + message.author.id);
+                        message.author.sendEmbed(embed);
+                    
                         message.author.send("**Suggestion**\nWrite details about what we need to improve.\n" +
                                             "Good example: `We need to have a #theshell channel for all talk about theShell.`\n" +
                                             "Bad example: `#theshell` **or** `Get us a theShell channel or else.`\n\n" +
                                             ":arrow_right: Detail your suggestion now. (1000 characters or less)");
                     } else {
                         state.state = 4;
-                        message.author.send("**Confirmation**\nThis is what the staff will see:");
 
                         var embed = new Discord.RichEmbed("test");
                         embed.setAuthor(message.author.username + "#" + message.author.discriminator, message.author.displayAvatarURL);
@@ -189,7 +214,6 @@ function handleSuggest(message) {
                 } else {
                     state.suggestion = message.content;
                     state.state = 4;
-                    message.author.send("**Confirmation**\nThis is what the staff will see:");
 
                     var embed = new Discord.RichEmbed("test");
                     embed.setAuthor(message.author.username + "#" + message.author.discriminator, message.author.displayAvatarURL);
@@ -236,7 +260,7 @@ function handleSuggest(message) {
                                         ":arrow_right: **Is this ok?**\n[y] Continue\n[anything else] Abort\n\n" +
                                         ":information_source: At any time, simply type `q` to cancel the suggestion.");
                 } else {
-                    message.author.send(":right_arrow: Ready to submit this suggestion?\n[y] Submit\n[r] Start over");
+                    message.author.send(":arrow_right: Ready to submit this suggestion?\n[y] Submit\n[r] Start over");
                 }
                 break;
                 
@@ -280,7 +304,7 @@ function isMod(member) {
 //var prank = true;
 
 function postBulletin() {
-    var channel = client.channels.get("277922530973581312");
+    var channel = client.channels.get("308576038324142081");
     
     switch (Math.floor(Math.random() * 1000) % 6) {
         case 0:
@@ -358,7 +382,7 @@ function messageChecker(oldMessage, newMessage) {
         //AKidFromTheUK       : 285740807854751754
 
         if (doModeration[message.guild.id]) { //Check if we should do moderation on this server
-            if ((expletiveFilter && message.guild.id == 277922530973581312) || message.guild.id == 278824407743463424) { //Check for expletives only if on AstralPhaser Central or theShell
+            if ((expletiveFilter && message.guild.id == 277922530973581312 && message.channel.id == 308576038324142081) || message.guild.id == 278824407743463424) { //Check for expletives only if on AstralPhaser Central or theShell
                 //Check for expletives
                 if (containsExpletive(msg)) { //Gah! They're not supposed to say that!
                     console.log("Expletive caught at " + parseInt(exp));
@@ -392,7 +416,7 @@ function messageChecker(oldMessage, newMessage) {
                 
                 
                 //Continue only if on AstralPhaser
-                if (message.guild.id == 277922530973581312) {
+                if (message.guild.id == 277922530973581312 && message.channel.id == 308576038324142081) {
                     //Check for links
                     
                     if (message.member != null && !(message.member.roles.find("name", "Patron Tier 5ive") || message.member.roles.find("name", "Patron Tier 2wo") || message.member.roles.find("name", "Patron Tier 3hree") ||message.member.roles.find("name", "Patron Tier 4our"))) {
